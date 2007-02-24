@@ -63,7 +63,6 @@ Imager::QRCode - Generate QR Code with Imager
         margin        => 2,
         version       => 1,
         level         => 'M',
-        kanji         => 1,
         casesensitive => 1,
         lightcolor    => Imager::Color->new(255, 255, 255),
         darkcolor     => Imager::Color->new(0, 0, 0),
@@ -85,55 +84,57 @@ This module allows you to generate QR Code with Imager. This module use libqrenc
 
 =over 4
 
-=item new()
+=item new
 
-The new() constructor method instantiates a new Imager::QRCode object. new() accepts the following parameters.
+    $qrcode = Imager::QRCode->new(%params);
+
+The C<new()> constructor method instantiates a new Imager::QRCode object. C<new()> accepts the following parameters.
 
 =over 4
 
-=item text
+=item *
 
-Input text. If you specify Japanese characters, you must encode it to Shift_JIS.
+C<size> - Horizontal and vertical size of module(dot). Default is 4.
 
-=item size
+=item *
 
-Horizontal and vertical size of module(dot). Default is 4.
+C<margin> - Margin size of QR Code. Default is 3.
 
-=item margin
+=item *
 
-Margin size of QR Code. Default is 3.
+C<level> - Error collectin level. Valid values are 'M', 'L', 'Q' or 'H'. Default is 'L'.
 
-=item level
+=item *
 
-Error collectin level. You can specify 'M', 'L', 'H' or 'Q'. Default is 'L'.
+C<version> - Version of the symbol. If specify '0', this module chooses the minimum version for the input data. Default is '0'.
 
-=item version
+=item *
 
-Version of the symbol. If you specify '0', this module chooses the minimum version for the input data. Default is '0'.
+C<mode> - Encoding mode. Valid values are 'numerical', 'alpha-numerical', '8-bit' or 'kanji'. Default is '8-bit'.
 
-=item kanji
+If not give C<casesensitive> then should be given C<mode>. If 'kanji' is given, characters will be encoded as Shif-JIS characters. If '8-bit' is given, all of non-alpha-numerical characters will be encoded as is. If you want to embed UTF-8 string, choose '8-bit'.
 
-If you specify Japanese characters to 'string' argument, You must set '1'.
+=item *
 
-=item casesensitive
-
-If your application is case-sensitive using 8-bit characters, set to '1'. Default is '0'.
+C<casesensitive> - If your application is case-sensitive using 8-bit characters, set to '1'. Default is '0'.
 
 =back
 
-=item plot(%params)
+=item plot($text)
 
-Create a new QR Code image. It returns Imager object.
+    $img = $qrcode->plot("blah blah");
+
+Create a new QR Code image. This method returns Imager object ploted QR Code with the given text.
 
 =back
 
-=head1 INSTANCE METHODS
+=head1 INSTANT METHODS
 
 =over 4
 
 =item plot_qrcode($text, \%params)
 
-This method is instance method. $text is input text for plot. %params is same paramater as new().
+Instant method. C<$text> is input text. C<%params> is same paramater as C<new()>.
 
 =back
 

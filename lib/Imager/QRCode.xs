@@ -16,24 +16,17 @@ extern "C" {
 DEFINE_IMAGER_CALLBACKS;
 
 QRcode *encode(const char *text,
-               QRecLevel level,
                int version,
-               int kanji,
+               QRecLevel level,
+               QRencodeMode mode,
                int casesensitive)
 {
-    QRencodeMode hint;
     QRcode *code;
-
-    if(kanji) {
-        hint = QR_MODE_KANJI;
-    } else {
-        hint = QR_MODE_8;
-    }
 
     if(casesensitive) {
         code = QRcode_encodeStringCase(text, version, level);
     } else {
-        code = QRcode_encodeString(text, version, level, hint);
+        code = QRcode_encodeString(text, version, level, mode);
     }
 
     return code;
@@ -90,7 +83,6 @@ void generate(i_img *im,
             i_box_filled(im, x*size, y*size, x*size + size, y*size + size - 1, lightcolor);
         }
     }
-    QRcode_free(qrcode);
 }
 
 i_img *_plot(char* text, HV *hv)
@@ -102,65 +94,66 @@ i_img *_plot(char* text, HV *hv)
     int size          = 3;
     int margin        = 4;
     int version       = 0;
-    int kanji         = 0;
     int casesensitive = 0;
+    QRencodeMode mode = QR_MODE_8;
     QRecLevel level   = QR_ECLEVEL_L;
     i_color lightcolor, darkcolor;
 
-    if ((svp = hv_fetch(hv, "size", 4, 0)) && *svp) {
-            ptr = SvPV(*svp, len);
-        if (SvOK(*svp)) {
+    if ((svp = hv_fetch(hv, "size", 4, 0)) && *svp && SvOK(*svp)) {
+        ptr = SvPV(*svp, len);
+        if (ptr >= 0)
             size = atoi(ptr);
-        }
     }
-    if ((svp = hv_fetch(hv, "margin", 6, 0)) && *svp) {
-        if (SvOK(*svp)) {
-            ptr = SvPV(*svp, len);
+    if ((svp = hv_fetch(hv, "margin", 6, 0)) && *svp && SvOK(*svp)) {
+        ptr = SvPV(*svp, len);
+        if (ptr >= 0)
             margin = atoi(ptr);
-        }
     }
-    if ((svp = hv_fetch(hv, "level", 5, 0)) && *svp) {
-        if (!SvOK(*svp)) {
+    if ((svp = hv_fetch(hv, "level", 5, 0)) && *svp && SvOK(*svp)) {
+        ptr = SvPV(*svp, len);
+        switch (*ptr) {
+        case 'l':
+        case 'L':
+            level = QR_ECLEVEL_L;
+            break;
+        case 'm':
+        case 'M':
+            level = QR_ECLEVEL_M;
+            break;
+        case 'q':
+        case 'Q':
+            level = QR_ECLEVEL_Q;
+            break;
+        case 'h':
+        case 'H':
+            level = QR_ECLEVEL_H;
+            break;
+        default:
             level = QR_ECLEVEL_L;
         }
-        else {
-            ptr = SvPV(*svp, len);
-            switch (*ptr) {
-            case 'l':
-            case 'L':
-                level = QR_ECLEVEL_L;
-                break;
-            case 'm':
-            case 'M':
-                level = QR_ECLEVEL_M;
-                break;
-            case 'q':
-            case 'Q':
-                level = QR_ECLEVEL_Q;
-                break;
-            case 'h':
-            case 'H':
-                level = QR_ECLEVEL_H;
-                break;
-            default:
-                level = QR_ECLEVEL_L;
-            }
-        }
     }
-    if ((svp = hv_fetch(hv, "version", 7, 0)) && *svp) {
-        if (!SvOK(*svp)) {
-            version = 0;
+    if ((svp = hv_fetch(hv, "version", 7, 0)) && *svp && SvOK(*svp)) {
+        ptr = SvPV(*svp, len);
+        if (ptr >= 0)
+            version = atoi(ptr);
+    }
+    if ((svp = hv_fetch(hv, "mode", 4, 0)) && *svp && SvOK(*svp)) {
+        ptr = SvPV(*svp, len);
+        if (strcmp(ptr, "numerical") == 0) {
+            mode = QR_MODE_NUM;
+        }
+        else if (strcmp(ptr, "alpha-numerical") == 0) {
+            mode = QR_MODE_AN;
+        }
+        else if (strcmp(ptr, "8-bit") == 0) {
+            mode = QR_MODE_8;
+        }
+        else if (strcmp(ptr, "kanji") == 0) {
+            mode = QR_MODE_KANJI;
         }
         else {
-            ptr = SvPV(*svp, len);
-            if (ptr < 0)
-                version = 0;
-            else 
-                version = atoi(ptr);
+            mode = QR_MODE_8;
         }
-    }
-    if ((svp = hv_fetch(hv, "kanji", 5, 0)) && *svp) {
-        kanji = SvTRUE(*svp);
     }
     if ((svp = hv_fetch(hv, "casesensitive", 13, 0)) && *svp) {
         casesensitive = SvTRUE(*svp);
@@ -186,7 +179,7 @@ i_img *_plot(char* text, HV *hv)
         darkcolor.rgba.a = 255;
     }
 
-    QRcode *qrcode = encode(text, level, version, kanji, casesensitive);
+    QRcode *qrcode = encode(text, version, level, mode, casesensitive);
     if(qrcode == NULL) {
         croak("Failed to encode the input data: XS error");
     }
