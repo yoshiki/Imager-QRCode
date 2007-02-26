@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-Imager::QRCode - Generate QR Code with Imager
+Imager::QRCode - Generate QR Code with Imager using libqrencode
 
 =head1 SYNOPSIS
 
@@ -112,7 +112,7 @@ C<version> - Version of the symbol. If specify '0', this module chooses the mini
 
 C<mode> - Encoding mode. Valid values are 'numerical', 'alpha-numerical', '8-bit' or 'kanji'. Default is '8-bit'.
 
-If not give C<casesensitive> then should be given C<mode>. If 'kanji' is given, characters will be encoded as Shif-JIS characters. If '8-bit' is given, all of non-alpha-numerical characters will be encoded as is. If you want to embed UTF-8 string, choose '8-bit'.
+If not give C<casesensitive> then should be given C<mode>. If 'kanji' is given, characters will be encoded as Shift-JIS characters. If '8-bit' is given, all of non-alpha-numerical characters will be encoded as is. If you want to embed UTF-8 string, choose '8-bit'.
 
 =item *
 
@@ -144,12 +144,12 @@ C<Imager>, C<http://www.qrcode.com/>, C<http://megaui.net/fukuchi/works/qrencode
 
 =head1 AUTHOR
 
-Yoshiki KURIHARA  C<< <kurihara@cpan.org> >>
+Yoshiki KURIHARA  C<< <kurihara __at__ cpan.org> >>
 
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007, Yoshiki KURIHARA C<< <kurihara@cpan.org> >>. All rights reserved.
+Copyright (c) 2007, Yoshiki KURIHARA C<< <kurihara __at__ cpan.org> >>. All rights reserved.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.

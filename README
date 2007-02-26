@@ -2,7 +2,11 @@ Imager-QRCode version 0.01
 
 INSTALLATION
 
-To install this module, run the following commands:
+First, You must install libqrencode-1.0.1.tar.gz
+(via. http://megaui.net/fukuchi/works/qrencode/index.en.html)
+
+
+Second, to install this module, run the following commands:
 
     perl Makefile.PL
     make
@@ -16,12 +20,6 @@ Alternatively, to install with Module::Build, you can use the following commands
     ./Build
     ./Build test
     ./Build install
-
-
-
-DEPENDENCIES
-
-None.
 
 
 COPYRIGHT AND LICENCE

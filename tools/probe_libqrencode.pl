@@ -17,4 +17,4 @@ EOT
 close $fh;
 
 system("cc -o test_libqrencode test_libqrencode.c") == 0 or
-    die "===> You must install libqrencode(http://megaui.net/fukuchi/works/qrencode/) <===";
+    die "===> You must install libqrencode(http://megaui.net/fukuchi/works/qrencode/index.en.html) <===";
