@@ -88,6 +88,7 @@ void generate(i_img *im,
 i_img *_plot(char* text, HV *hv)
 {
     i_img* im;
+    QRcode *qrcode;
     SV** svp;
     STRLEN len;
     char* ptr;
@@ -179,7 +180,7 @@ i_img *_plot(char* text, HV *hv)
         darkcolor.rgba.a = 255;
     }
 
-    QRcode *qrcode = encode(text, version, level, mode, casesensitive);
+    qrcode = encode(text, version, level, mode, casesensitive);
     if(qrcode == NULL) {
         croak("Failed to encode the input data: XS error");
     }
