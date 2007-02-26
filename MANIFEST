@@ -8,6 +8,6 @@ MANIFEST
 META.yml			# Will be created by "make dist"
 README
 t/00.load.t
-t/perlcritic.t
-t/pod.t
+t/01.plot.t
+t/02.plot_qrcode.t
 tools/probe_libqrencode.pl

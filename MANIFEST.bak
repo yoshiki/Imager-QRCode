@@ -1,4 +1,3 @@
-.cvsignore
 Build.PL
 Changes
 examples/generate.pl
@@ -7,10 +6,6 @@ lib/Imager/QRCode.xs
 Makefile.PL
 MANIFEST
 META.yml			# Will be created by "make dist"
-QRCode.xs
 README
 t/00.load.t
-t/perlcritic.t
-t/pod-coverage.t
-t/pod.t
 tools/probe_libqrencode.pl

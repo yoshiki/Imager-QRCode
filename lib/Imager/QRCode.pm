@@ -7,7 +7,7 @@ use vars qw(@ISA $VERSION @EXPORT_OK);
 
 @EXPORT_OK = qw(plot_qrcode);
 
-use Carp;
+use Carp qw(croak);
 use Imager 0.55;
 
 BEGIN {
@@ -25,23 +25,26 @@ BEGIN {
 
 sub new {
     my $class  = shift;
-    my $params = ref $_[0] eq 'HASH' ? $_[0] : { @_ };
+    my $params = scalar ref $_[0] eq 'HASH' ? $_[0] : { @_ };
     return bless { params => $params }, $class;
 }
 
 sub plot {
     my ( $self, $text ) = @_;
-    length $text or Carp::croak "You must specify text.";
+    $text or croak 'Not enough arguments for plot()';
     return _imager( _plot($text, $self->{params}) );
 }
 
 sub plot_qrcode {
     my ( $text, $params ) = @_;
+    $text or croak 'Not enough arguments for plot()';
+    $params ||= {} if !$params || ref $params ne 'HASH';
     return _imager( _plot( $text, $params ) );
 }
 
 sub _imager {
     my $raw = shift;
+    ref $raw eq 'Imager::ImgRaw' or croak "_imager() argument must be Imager::ImgRaw";
     my $img = Imager->new;
     $img->{IMG} = $raw;
     return $img;
