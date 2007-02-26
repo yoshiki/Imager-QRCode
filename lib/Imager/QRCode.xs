@@ -13,8 +13,6 @@ extern "C" {
 #include "imperl.h"
 #include "qrencode.h"
 
-DEFINE_IMAGER_CALLBACKS;
-
 QRcode *encode(const char *text,
                int version,
                QRecLevel level,
@@ -84,6 +82,8 @@ void generate(i_img *im,
         }
     }
 }
+
+DEFINE_IMAGER_CALLBACKS;
 
 i_img *_plot(char* text, HV *hv)
 {
