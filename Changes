@@ -1,5 +1,8 @@
 Revision history for Imager-QRCode
 
+0.03   Thu Jun 26 17:09:16 2008 JST
+       - Fixed module dependency problem in Makefile.PL.
+
 0.02   Thu Jun 26 11:33:44 2008 JST
        - The libqrencode ver 2.0.0 or above supported.
        - Build.PL removed.

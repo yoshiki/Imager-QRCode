@@ -1,15 +1,58 @@
 use strict;
 use warnings;
-use ExtUtils::MakeMaker;
-use Imager::ExtUtils;
+use inc::Module::Install;
+use File::Copy;
 
-my $compile_cmd     = 'cc -I/usr/local/include -I/usr/include -lqrencode';
-my $libqrencode_url = 'http://megaui.net/fukuchi/works/qrencode/index.en.html';
-my $version;
-my $fh;
+copy('lib/Imager/QRCode.xs', 'QRCode.xs');
 
-open $fh, '>', 'test_libqrencode.c';
-print $fh <<'EOT';
+name                'Imager-QRCode';
+author              'Yoshiki KURIHARA <kurihara at cpan.org>';
+all_from            'lib/Imager/QRCode.pm';
+
+cc_inc_paths '.';
+can_cc or die "This module requires a C compiler";
+
+build_requires      'Test::More'       => 0;
+build_requires      'Imager'           => '0.55';
+requires            'Encode'           => 0;
+
+auto_install;
+WriteAll;
+
+sub MY::post_constants {
+    my $define = eval { test_libqrencode() };
+    if ( $@ ) {
+        warn $@;
+        exit 0; # tell cpan testers that this is not a failure
+    }
+    eval { require Imager::ExtUtils };
+    if ( $@ ) {
+        warn "*** You must install Imager.";
+        exit 0; # tell cpan testers that this is not a failure
+    }
+    my $typemap  = Imager::ExtUtils->typemap;
+    my $includes = Imager::ExtUtils->includes;
+    return <<"POST_CONST";
+XSUBPPARGS += -typemap $typemap
+INC += $includes
+CCFLAGS += $define
+LDDLFLAGS += -lqrencode
+LDFLAGS += -lqrencode
+POST_CONST
+}
+
+sub test_libqrencode {
+    my $compile_cmd     = 'cc -I/usr/local/include -I/usr/include -lqrencode';
+    my $libqrencode_url = 'http://megaui.net/fukuchi/works/qrencode/index.en.html';
+    my $version;
+    my $fh;
+    my %define_of = (
+        '1.0.2' => '-DUNDER_LIBQRENCODE_1_0_2',
+        '2.0.0' => '-DOVER_LIBQRENCODE_2_0_0',
+    );
+
+    open $fh, '>', 'test_libqrencode.c';
+    print $fh <<'EOT';
 #include <stdio.h>
 #include "qrencode.h"
 
@@ -20,13 +63,14 @@ int main(int argc, char **argv)
 }
 EOT
     ;
-close $fh;
+    close $fh;
 
-system("$compile_cmd -o test_libqrencode test_libqrencode.c >/dev/null 2>&1") == 0
-    or die "*** You must install libqrencode. ***\nSee $libqrencode_url";
+    system("$compile_cmd -o test_libqrencode test_libqrencode.c >/dev/null 2>&1") == 0
+        or warn "*** You must install libqrencode.\n*** See $libqrencode_url";
+    unlink for qw( test_libqrencode test_libqrencode.c );
 
-open $fh, '>', 'test_libqrencode1.0.2.c';
-print $fh <<'EOT';
+    open $fh, '>', 'test_libqrencode1.0.2.c';
+    print $fh <<'EOT';
 #include <stdio.h>
 #include "qrencode.h"
 
@@ -38,11 +82,12 @@ int main(int argc, char **argv)
 }
 EOT
     ;
-system("$compile_cmd -o test_libqrencode1.0.2 test_libqrencode1.0.2.c >/dev/null 2>&1") == 0
-    and $version = "1.0.2";
+    system("$compile_cmd -o test_libqrencode1.0.2 test_libqrencode1.0.2.c >/dev/null 2>&1") == 0
+        and $version = "1.0.2";
+    unlink for qw( test_libqrencode1.0.2 test_libqrencode1.0.2.c );
 
-open $fh, '>', 'test_libqrencode2.0.0.c';
-print $fh <<'EOT';
+    open $fh, '>', 'test_libqrencode2.0.0.c';
+    print $fh <<'EOT';
 #include <stdio.h>
 #include "qrencode.h"
 
@@ -54,32 +99,10 @@ int main(int argc, char **argv)
 }
 EOT
     ;
-system("$compile_cmd -o test_libqrencode2.0.0 test_libqrencode2.0.0.c >/dev/null 2>&1") == 0
-    and $version = "2.0.0";
+    system("$compile_cmd -o test_libqrencode2.0.0 test_libqrencode2.0.0.c >/dev/null 2>&1") == 0
+        and $version = "2.0.0";
+    unlink for qw( test_libqrencode2.0.0 test_libqrencode2.0.0.c );
 
-my %define_of = (
-    '1.0.2' => '-DUNDER_LIBQRENCODE_1_0_2',
-    '2.0.0' => '-DOVER_LIBQRENCODE_2_0_0',
-);
-
-link('lib/Imager/QRCode.xs', 'QRCode.xs');
-WriteMakefile(
-    NAME                => 'Imager::QRCode',
-    AUTHOR              => 'Yoshiki KURIHARA <kurihara at cpan.org>',
-    VERSION_FROM        => 'lib/Imager/QRCode.pm',
-    ABSTRACT_FROM       => 'lib/Imager/QRCode.pm',
-    PL_FILES            => {},
-    PREREQ_PM => {
-        'Test::More'       => 0,
-        'Imager'           => 0.55,
-        'Imager::ExtUtils' => 0,
-        'Encode'           => 0,
-    },
-    INC                 => Imager::ExtUtils->includes . ' -I/usr/local/include -I.',
-    LIBS                => [ '-lqrencode' ],
-    TYPEMAPS            => [ Imager::ExtUtils->typemap ],
-    CCFLAGS             => $define_of{ $version },
-    OBJECT              => 'QRCode.o',
-    dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean               => { FILES => 'Imager-QRCode-* QRCode.xs test_libqrencode* *.gif' },
-);
+    die unless $version;
+    return $define_of{ $version };
+}
