@@ -1,7 +1,7 @@
 Changes
 examples/generate.pl
 lib/Imager/QRCode.pm
-lib/Imager/QRCode.xs
+QRCode.xs
 Makefile.PL
 MANIFEST
 META.yml			# Will be created by "make dist"

@@ -3,8 +3,6 @@ use warnings;
 use inc::Module::Install;
 use File::Copy;
 
-copy('lib/Imager/QRCode.xs', 'QRCode.xs');
-
 name                'Imager-QRCode';
 author              'Yoshiki KURIHARA <kurihara at cpan.org>';
 all_from            'lib/Imager/QRCode.pm';
