@@ -22,6 +22,7 @@ WriteAll;
 sub MY::post_constants {
     my $define = eval { test_libqrencode() };
     if ( $@ ) {
+        warn $@;
         exit 0; # tell cpan testers that this is not a failure
     }
     eval { require Imager::ExtUtils };
@@ -67,8 +68,10 @@ EOT
     close $fh;
 
     system("$compile_cmd -o test_libqrencode test_libqrencode.c >/dev/null 2>&1") == 0
-        or warn "*** You must install libqrencode.\n*** See $libqrencode_url";
-    unlink for qw( test_libqrencode test_libqrencode.c );
+        or do {
+            unlink for qw( test_libqrencode test_libqrencode.c );
+            die "*** You must install libqrencode.\n*** See $libqrencode_url";
+        };
 
     open $fh, '>', 'test_libqrencode1.0.2.c';
     print $fh <<'EOT';
@@ -85,7 +88,6 @@ EOT
     ;
     system("$compile_cmd -o test_libqrencode1.0.2 test_libqrencode1.0.2.c >/dev/null 2>&1") == 0
         and $version = "1.0.2";
-    unlink for qw( test_libqrencode1.0.2 test_libqrencode1.0.2.c );
 
     open $fh, '>', 'test_libqrencode2.0.0.c';
     print $fh <<'EOT';
@@ -102,8 +104,11 @@ EOT
     ;
     system("$compile_cmd -o test_libqrencode2.0.0 test_libqrencode2.0.0.c >/dev/null 2>&1") == 0
         and $version = "2.0.0";
-    unlink for qw( test_libqrencode2.0.0 test_libqrencode2.0.0.c );
 
-    die unless $version;
+    unlink for qw( test_libqrencode test_libqrencode.c
+                   test_libqrencode1.0.2 test_libqrencode1.0.2.c
+                   test_libqrencode2.0.0 test_libqrencode2.0.0.c );
+
+    die "*** Unknown error occured in libqrencode version check process." unless $version;
     return $define_of{ $version };
 }
