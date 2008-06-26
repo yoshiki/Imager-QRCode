@@ -22,7 +22,6 @@ WriteAll;
 sub MY::post_constants {
     my $define = eval { test_libqrencode() };
     if ( $@ ) {
-        warn $@;
         exit 0; # tell cpan testers that this is not a failure
     }
     eval { require Imager::ExtUtils };
@@ -42,8 +41,10 @@ POST_CONST
 }
 
 sub test_libqrencode {
-    my $compile_cmd     = 'cc -I/usr/local/include -I/usr/include -lqrencode';
-    my $libqrencode_url = 'http://megaui.net/fukuchi/works/qrencode/index.en.html';
+    my $compile_cmd
+        = 'cc -I/usr/local/include -I/usr/include -L/usr/lib -L/usr/local/lib -lqrencode';
+    my $libqrencode_url
+        = 'http://megaui.net/fukuchi/works/qrencode/index.en.html';
     my $version;
     my $fh;
     my %define_of = (
