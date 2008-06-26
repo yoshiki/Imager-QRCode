@@ -13,6 +13,7 @@ extern "C" {
 #include "imperl.h"
 #include "qrencode.h"
 
+#ifdef UNDER_LIBQRENCODE_1_0_2
 QRcode *encode(const char *text,
                int version,
                QRecLevel level,
@@ -29,6 +30,25 @@ QRcode *encode(const char *text,
 
     return code;
 }
+#else
+QRcode *encode(const char *text,
+               int version,
+               QRecLevel level,
+               QRencodeMode mode,
+               int casesensitive)
+{
+    QRcode *code = QRcode_encodeString(text, version, level, mode, casesensitive);
+    return code;
+}
+
+QRcode *encode_8bit(const char *text,
+                    int version,
+                    QRecLevel level)
+{
+    QRcode *code = QRcode_encodeString8bit(text, version, level);
+    return code;
+}
+#endif
 
 void generate(i_img *im,
               QRcode *qrcode,
@@ -153,7 +173,7 @@ i_img *_plot(char* text, HV *hv)
             mode = QR_MODE_KANJI;
         }
         else {
-            mode = QR_MODE_8;
+            croak("Invalid mode: XS error");
         }
     }
     if ((svp = hv_fetch(hv, "casesensitive", 13, 0)) && *svp) {
@@ -180,10 +200,16 @@ i_img *_plot(char* text, HV *hv)
         darkcolor.rgba.a = 255;
     }
 
+#ifdef UNDER_LIBQRENCODE_1_0_2
     qrcode = encode(text, version, level, mode, casesensitive);
-    if(qrcode == NULL) {
+#else
+    if (mode == QR_MODE_8 || mode == QR_MODE_KANJI)
+        qrcode = encode_8bit(text, version, level);
+    else
+        qrcode = encode(text, version, level, mode, casesensitive);
+#endif
+    if (qrcode == NULL)
         croak("Failed to encode the input data: XS error");
-    }
 
     im = i_img_16_new(
         (qrcode->width + margin * 2) * size,

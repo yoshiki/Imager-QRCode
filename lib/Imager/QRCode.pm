@@ -11,7 +11,7 @@ use Carp qw(croak);
 use Imager 0.55;
 
 BEGIN {
-    $VERSION = '0.01';
+    $VERSION = '0.02';
     eval {
         require XSLoader;
         XSLoader::load('Imager::QRCode', $VERSION);
@@ -81,7 +81,7 @@ Imager::QRCode - Generate QR Code with Imager using libqrencode
 
 =head1 DESCRIPTION
 
-This module allows you to generate QR Code with Imager. This module use libqrencode library.
+This module allows you to generate QR Code with Imager. This module use libqrencode '2.0.0' and above.
 
 =head1 METHODS
 

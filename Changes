@@ -1,5 +1,9 @@
 Revision history for Imager-QRCode
 
+0.02   Thu Jun 26 11:33:44 2008 JST
+       - The libqrencode ver 2.0.0 or above supported.
+       - Build.PL removed.
+
 0.01   Mon Feb 26 12:48:09 2007 JST
-       Initial release.
+       - Initial release.
 
