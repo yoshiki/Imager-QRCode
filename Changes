@@ -1,5 +1,8 @@
 Revision history for Imager-QRCode
 
+0.031  Fri Jul  4 20:55:30 2008 JST
+       - Fixed module dependency problem in META.yml.
+
 0.03   Thu Jun 26 17:09:16 2008 JST
        - Fixed module dependency problem about Imager::ExtUtils in Makefile.PL.
 
