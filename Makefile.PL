@@ -11,10 +11,8 @@ cc_inc_paths '.';
 can_cc or die "This module requires a C compiler";
 
 configure_requires  'Imager'           => '0.55';
-build_requires      'Test::More'       => 0;
 build_requires      'Imager'           => '0.55';
-requires            'Imager'           => '0.55';
-requires            'Encode'           => 0;
+test_requires       'Test::More'       => 0;
 
 auto_install;
 WriteAll;

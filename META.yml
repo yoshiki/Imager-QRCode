@@ -20,7 +20,4 @@ no_index:
     - t
     - examples
     - examples
-requires:
-  Encode: 0
-  Imager: 0.55
 version: 0.031
