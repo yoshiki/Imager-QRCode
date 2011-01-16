@@ -26,4 +26,4 @@ requires:
   XSLoader: 0.1
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.031
+version: 0.032

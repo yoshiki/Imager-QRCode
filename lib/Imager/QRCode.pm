@@ -11,7 +11,7 @@ use Carp qw(croak);
 use Imager 0.55;
 
 BEGIN {
-    $VERSION = '0.031';
+    $VERSION = '0.032';
     eval {
         require XSLoader;
         XSLoader::load('Imager::QRCode', $VERSION);
@@ -149,10 +149,13 @@ C<Imager>, C<http://www.qrcode.com/>, C<http://megaui.net/fukuchi/works/qrencode
 
 Yoshiki KURIHARA  C<< <kurihara __at__ cpan.org> >>
 
+=head1 THANKS
+
+Tokuhiro Matsuno
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007, Yoshiki KURIHARA C<< <kurihara __at__ cpan.org> >>.
+Copyright (c) 2011, Yoshiki KURIHARA C<< <kurihara __at__ cpan.org> >>.
 
 This module is free software; you can redistribute it and/or
 modify it under the same terms as Perl itself. See L<perlartistic>.
