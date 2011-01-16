@@ -11,7 +11,7 @@ use Carp qw(croak);
 use Imager 0.55;
 
 BEGIN {
-    $VERSION = '0.032';
+    $VERSION = '0.033';
     eval {
         require XSLoader;
         XSLoader::load('Imager::QRCode', $VERSION);
