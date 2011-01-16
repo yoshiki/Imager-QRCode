@@ -7,9 +7,9 @@ name                'Imager-QRCode';
 author              'Yoshiki KURIHARA <kurihara at cpan.org>';
 all_from            'lib/Imager/QRCode.pm';
 
-cc_inc_paths 'vendor/qrencode-3.1.1/';
 can_cc or die "This module requires a C compiler";
 
+cc_inc_paths 'src';
 cc_src_paths 'src';
 
 configure_requires  'Imager'           => '0.55';
