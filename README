@@ -1,9 +1,6 @@
 INSTALLATION
 
-1) You must install libqrencode.
-(via. http://megaui.net/fukuchi/works/qrencode/index.en.html)
-
-2) To install this module, run the following commands:
+To install this module, run the following commands:
 
     perl Makefile.PL
     make
