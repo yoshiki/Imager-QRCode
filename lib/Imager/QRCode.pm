@@ -73,7 +73,7 @@ Imager::QRCode - Generate QR Code with Imager using libqrencode
     my $img = $qrcode->plot("blah blah");
     $img->write(file => "qrcode.gif");
 
-    # or instance method
+    # or exporting function
     use Imager::QRCode qw(plot_qrcode);
 
     my $img = plot_qrcode("blah blah", \%params);
