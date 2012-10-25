@@ -73,7 +73,7 @@ Imager::QRCode - Generate QR Code with Imager using libqrencode
     my $img = $qrcode->plot("blah blah");
     $img->write(file => "qrcode.gif");
 
-    # or instance method
+    # or exporting function
     use Imager::QRCode qw(plot_qrcode);
 
     my $img = plot_qrcode("blah blah", \%params);
@@ -105,7 +105,7 @@ C<margin> - Margin size of QR Code. Default is 3.
 
 =item *
 
-C<level> - Error collectin level. Valid values are 'M', 'L', 'Q' or 'H'. Default is 'L'.
+C<level> - Error correction level. Valid values are 'M', 'L', 'Q' or 'H'. Default is 'L'.
 
 =item *
 
@@ -127,17 +127,17 @@ C<casesensitive> - If your application is case-sensitive using 8-bit characters,
 
     $img = $qrcode->plot("blah blah");
 
-Create a new QR Code image. This method returns Imager object ploted QR Code with the given text.
+Create a new QR Code image. This method returns Imager object plotted QR Code with the given text.
 
 =back
 
-=head1 INSTANT METHODS
+=head1 EXPORTABLE FUNCTION
 
 =over 4
 
 =item plot_qrcode($text, \%params)
 
-Instant method. C<$text> is input text. C<%params> is same paramater as C<new()>.
+C<$text> is input text. C<%params> is same paramater as C<new()>.
 
 =back
 
