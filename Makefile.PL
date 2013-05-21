@@ -30,7 +30,7 @@ sub MY::post_constants {
     return <<"POST_CONST";
 XSUBPPARGS += -typemap $typemap
 INC += $includes
-CCFLAGS += -DOVER_LIBQRENCODE_2_0_0
+CCFLAGS += -DOVER_LIBQRENCODE_2_0_0 -DHAVE_CONFIG_H
 POST_CONST
 }
 

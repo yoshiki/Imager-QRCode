@@ -203,7 +203,7 @@ i_img *_plot(char* text, HV *hv)
 #ifdef UNDER_LIBQRENCODE_1_0_2
     qrcode = encode(text, version, level, mode, casesensitive);
 #else
-    if (mode == QR_MODE_8 || mode == QR_MODE_KANJI)
+    if (mode == QR_MODE_8)
         qrcode = encode_8bit(text, version, level);
     else
         qrcode = encode(text, version, level, mode, casesensitive);
