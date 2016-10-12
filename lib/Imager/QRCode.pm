@@ -71,13 +71,15 @@ Imager::QRCode - Generate QR Code with Imager using libqrencode
         darkcolor     => Imager::Color->new(0, 0, 0),
     );
     my $img = $qrcode->plot("blah blah");
-    $img->write(file => "qrcode.gif");
+    $img->write(file => "qrcode.gif")
+      or die "Failed to write: " . $img->errstr;
 
     # or exporting function
     use Imager::QRCode qw(plot_qrcode);
 
     my $img = plot_qrcode("blah blah", \%params);
-    $img->write(file => "qrcode.gif");
+    $img->write(file => "qrcode.gif")
+      or die "Failed to write: " . $img->errstr;
 
 =head1 DESCRIPTION
 
